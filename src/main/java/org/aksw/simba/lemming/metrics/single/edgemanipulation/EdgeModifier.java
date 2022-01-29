@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import com.carrotsearch.hppc.ObjectDoubleOpenHashMap;
 
-import javax.annotation.Nonnull;
-
 public class EdgeModifier {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EdgeModifier.class);
@@ -95,6 +93,10 @@ public class EdgeModifier {
         return (ColouredGraph) this.graph;
     }
 
+    /**
+     * Update the {@link IColouredGraph} object and reset the triple stored in each
+     * decorator object after an iteration has completed
+     */
     public void updateDecorators() {
 
         this.mAddEdgeDecorator.setGraph(this.graph);
@@ -111,8 +113,6 @@ public class EdgeModifier {
             this.mRemoveEdgeDecorator.setTriple(triple);
             ObjectDoubleOpenHashMap<String> mapMetricValues = new ObjectDoubleOpenHashMap<>();
 
-            // this.graph.removeEdge(triple.edgeId);
-
             for (SingleValueMetric metric : mLstMetrics) {
                 // Calling update method to get the metric values based on previous results
                 UpdatableMetricResult result = metric.update(this.mRemoveEdgeDecorator, triple, Operation.REMOVE,
@@ -120,9 +120,6 @@ public class EdgeModifier {
                 mMapMetricsResultRemoveEdge.put(metric.getName(), result);
                 mapMetricValues.put(metric.getName(), result.getResult());
             }
-
-            // reverse the graph
-            // graph.addEdge(triple.tailId, triple.headId, triple.edgeColour);
 
             return mapMetricValues;
         } else {
@@ -137,8 +134,6 @@ public class EdgeModifier {
 
             ObjectDoubleOpenHashMap<String> mapMetricValues = new ObjectDoubleOpenHashMap<>();
 
-            // graph.addEdge(triple.tailId, triple.headId, triple.edgeColour);
-
             for (SingleValueMetric metric : mLstMetrics) {
                 // Calling update method to get the metric values based on previous results
                 UpdatableMetricResult result = metric.update(this.mAddEdgeDecorator, triple, Operation.ADD,
@@ -146,9 +141,6 @@ public class EdgeModifier {
                 mMapMetricsResultAddEdge.put(metric.getName(), result);
                 mapMetricValues.put(metric.getName(), result.getResult());
             }
-
-            // reverse the graph
-            // graph.removeEdge(triple.edgeId);
 
             return mapMetricValues;
         } else {

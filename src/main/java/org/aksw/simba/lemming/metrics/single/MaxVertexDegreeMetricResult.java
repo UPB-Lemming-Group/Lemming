@@ -1,8 +1,5 @@
 package org.aksw.simba.lemming.metrics.single;
 
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
-
 /**
  * The class stores the candidate's set and their metric values, which is used
  * for computing the max vertex degrees for different metrics.
@@ -12,38 +9,37 @@ import it.unimi.dsi.fastutil.ints.IntSet;
  */
 public class MaxVertexDegreeMetricResult extends SingleValueMetricResult {
 
-    private double maxVertexDegree = 0.0;
-    // Variable for storing max degree
+    /**
+     * Variable for storing number of vertices with maximum degree
+     */
+    private int numOfVerticesWithMaxDeg = 0;
 
     /**
      * Initialization calls super class with the name of metric and metric value.
      * 
-     * @param metricName
-     *            - Name of the metric.
-     * @param result
-     *            - Metric value.
+     * @param metricName - Name of the metric.
+     * @param result     - Metric value.
      */
     public MaxVertexDegreeMetricResult(String metricName, double result) {
         super(metricName, result);
     }
 
     /**
-     * Returns the current max vertex degree.
+     * Returns the number of vertices that have the maximum degree.
      * 
-     * @return - max vertex degree.
+     * @return - Integer value
      */
-    public double getMaxVertexDegree() {
-        return maxVertexDegree;
+    public int getNumOfVerticesWithMaxDeg() {
+        return numOfVerticesWithMaxDeg;
     }
 
     /**
-     * Update the  max vertex degree metric values.
+     * Updates the number of vertices that have maximum degree.
      * 
-     * @param maxVertexDegreeTemp
-     *            - - Input vertex degree metric value that needs to be updated.
+     * @param numOfVerticesWithMaxDeg
      */
-    public void setMaxVertexDegree( double maxVertexDegreeTemp) {
-        maxVertexDegree = maxVertexDegreeTemp;
+    public void setNumOfVerticesWithMaxDeg(int numOfVerticesWithMaxDeg) {
+        this.numOfVerticesWithMaxDeg = numOfVerticesWithMaxDeg;
     }
 
 }
