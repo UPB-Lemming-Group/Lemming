@@ -3,6 +3,11 @@
  */
 package org.aksw.simba.lemming;
 
+import org.aksw.simba.lemming.grph.DiameterAlgorithm;
+import org.aksw.simba.lemming.mimicgraph.constraints.TripleBaseSingleID;
+import org.apache.commons.lang3.ArrayUtils;
+import grph.Grph.DIRECTION;
+import grph.path.ArrayListPath;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntSet;
 
@@ -15,6 +20,11 @@ import it.unimi.dsi.fastutil.ints.IntSet;
  *
  */
 public class AddEdgeDecorator extends ColouredGraphDecorator {
+    /**
+     * Instance of Diameter algorithm that will run on the decorator handling edge
+     * addition
+     */
+    protected DiameterAlgorithm diameterAlgorithm;
 
     /**
      * Class Constructor
@@ -195,4 +205,37 @@ public class AddEdgeDecorator extends ColouredGraphDecorator {
             return -1;
         }
     }
+
+    /**
+     * Get all neighbors of all nodes in given direction after a pre-selected edge
+     * is added to the graph. Used to compute the diameter of given graph
+     * 
+     * @param direction - Direction of edge to consider for neighbors. In-neighbors
+     *                  or Out-neighbors depending on the direction.
+     * @return int[][] - Two dimension integer array containing all neighbors of all
+     *         nodes in the given direction.
+     */
+    @Override
+    public int[][] getNeighbors(DIRECTION direction) {
+        int[][] neighbors = super.getNeighbors(direction);
+        neighbors[triple.tailId] = ArrayUtils.add(neighbors[triple.tailId], triple.headId);
+        return neighbors;
+    }
+
+    @Override
+    public int computeShorterDiameter(TripleBaseSingleID triple, ArrayListPath path) {
+        this.diameterAlgorithm = new DiameterAlgorithm();
+        return diameterAlgorithm.computeShorterDiameter(this, triple, path);
+    }
+
+    @Override
+    public double getDiameter() {
+        return this.diameterAlgorithm.performSearch(this, this.getVertices());
+    }
+
+    @Override
+    public ArrayListPath getDiameterPath() {
+        return this.diameterAlgorithm.getDiameterPath();
+    }
+
 }

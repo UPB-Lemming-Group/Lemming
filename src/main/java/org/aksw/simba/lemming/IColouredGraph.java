@@ -4,10 +4,13 @@
 package org.aksw.simba.lemming;
 
 import org.aksw.simba.lemming.colour.ColourPalette;
+import org.aksw.simba.lemming.mimicgraph.constraints.TripleBaseSingleID;
 
 import com.carrotsearch.hppc.BitSet;
 
+import grph.Grph.DIRECTION;
 import grph.Grph;
+import grph.path.ArrayListPath;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntSet;
 
@@ -113,7 +116,7 @@ public interface IColouredGraph {
     IntSet getEdges();
 
     /**
-     * Get edge colour
+     * Get edge color
      * 
      * @param edgeId
      * @return BitSet
@@ -121,7 +124,7 @@ public interface IColouredGraph {
     BitSet getEdgeColour(int edgeId);
 
     /**
-     * Get property colour
+     * Get property color
      * 
      * @return Object
      */
@@ -227,4 +230,29 @@ public interface IColouredGraph {
      */
     ColourPalette getEdgePalette();
 
+    /**
+     * Get the nodes and edges forming the diameter.
+     * 
+     * @return ArrayListPath - node and edge information of the diameter path.
+     */
+    ArrayListPath getDiameterPath();
+
+    /**
+     * Get all neighbors of all the nodes in the given direction.
+     * 
+     * @param direction - Direction of edge to consider for neighbors. In-neighbors
+     *                  or Out-neighbors depending on the direction.
+     * @return int[][] - Two dimension integer array containing all neighbors of all
+     *         nodes in the given direction.
+     */
+    int[][] getNeighbors(DIRECTION direction);
+
+    /**
+     * Method to check if addition of selected edge shortens the diameter.
+     * 
+     * @param triple - triple that is to be added
+     * @param path   - existing diameter path
+     * @return int - new diameter length
+     */
+    int computeShorterDiameter(TripleBaseSingleID triple, ArrayListPath oldPath);
 }

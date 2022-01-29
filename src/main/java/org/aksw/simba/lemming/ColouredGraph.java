@@ -1,5 +1,7 @@
 package org.aksw.simba.lemming;
 
+import grph.Grph.DIRECTION;
+import grph.path.ArrayListPath;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 import org.aksw.simba.lemming.colour.ColourPalette;
 import org.aksw.simba.lemming.grph.DiameterAlgorithm;
+import org.aksw.simba.lemming.mimicgraph.constraints.TripleBaseSingleID;
 import org.aksw.simba.lemming.util.Constants;
 import org.apache.jena.vocabulary.RDF;
 import org.slf4j.Logger;
@@ -20,7 +23,6 @@ import com.carrotsearch.hppc.ObjectArrayList;
 
 import grph.DefaultIntSet;
 import grph.Grph;
-import grph.GrphAlgorithmCache;
 import grph.algo.MultiThreadProcessing;
 import grph.in_memory.InMemoryGrph;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -47,7 +49,7 @@ public class ColouredGraph implements IColouredGraph {
      */
     protected Map<BitSet, String> mapLiteralTypes;
 
-    protected GrphAlgorithmCache<Integer> diameterAlgorithm;
+    protected DiameterAlgorithm diameterAlgorithm;
 
     public ColouredGraph() {
         this(null, null);
@@ -87,7 +89,8 @@ public class ColouredGraph implements IColouredGraph {
 
     protected void setGraph(Grph graph) {
         this.graph = graph;
-        diameterAlgorithm = new DiameterAlgorithm().cacheResultForGraph(graph);
+        diameterAlgorithm = new DiameterAlgorithm();
+        diameterAlgorithm.cacheResultForGraph(graph);
     }
 
     public ObjectArrayList<BitSet> getVertexColours() {
@@ -808,4 +811,29 @@ public class ColouredGraph implements IColouredGraph {
         }
         return counter;
     }
+
+    @Override
+    public ArrayListPath getDiameterPath() {
+        return diameterAlgorithm.getDiameterPath();
+    }
+
+    /**
+     * Get all neighbors of all nodes in the graph. Used to compute the diameter of
+     * given graph
+     * 
+     * @param direction - Direction of edge to consider for neighbors. In-neighbors
+     *                  or Out-neighbors depending on the direction we consider.
+     * @return int[][] - Two dimension integer array containing all neighbors of all
+     *         nodes in the given direction.
+     */
+    @Override
+    public int[][] getNeighbors(DIRECTION direction) {
+        return this.graph.getNeighbors(direction);
+    }
+
+    @Override
+    public int computeShorterDiameter(TripleBaseSingleID triple, ArrayListPath oldPath) {
+        return diameterAlgorithm.computeShorterDiameter(this, triple, oldPath);
+    }
+
 }

@@ -7,7 +7,9 @@ import org.aksw.simba.lemming.colour.ColourPalette;
 import org.aksw.simba.lemming.mimicgraph.constraints.TripleBaseSingleID;
 import com.carrotsearch.hppc.BitSet;
 
+import grph.Grph.DIRECTION;
 import grph.Grph;
+import grph.path.ArrayListPath;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntSet;
 
@@ -325,6 +327,21 @@ public class ColouredGraphDecorator implements IColouredGraph {
     @Override
     public ColourPalette getEdgePalette() {
         return this.decoratedGraph.getEdgePalette();
+    }
+
+    @Override
+    public int computeShorterDiameter(TripleBaseSingleID triple, ArrayListPath path) {
+        return this.decoratedGraph.computeShorterDiameter(triple, path);
+    }
+
+    @Override
+    public ArrayListPath getDiameterPath() {
+        return this.decoratedGraph.getDiameterPath();
+    }
+
+    @Override
+    public int[][] getNeighbors(DIRECTION direction) {
+        return this.decoratedGraph.getNeighbors(direction);
     }
 
 }
