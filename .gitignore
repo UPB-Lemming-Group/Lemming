@@ -1,3 +1,7 @@
+22-rdf-syntax-ns
+dependency-reduced-pom.xml
+rdf-schema
+results/
 *.bin
 *.bin.gz
 *.class
@@ -8,3 +12,14 @@ bin
 .settings
 *.log
 SemanticWebDogFood
+*.val
+*.owl
+*.result
+*.ser
+GeologyGraphs
+geology
+swdf-owls
+lgeo
+LinkedGeoGraphs
+PersonGraph
+PersonGraphs
