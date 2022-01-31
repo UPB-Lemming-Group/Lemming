@@ -60,6 +60,7 @@ public class PrecomputingValues {
     public static void main(String[] args) {
         LOGGER.info("Start precomputing metric and constant expressions!");
         // MultiThreadProcessing.defaultNumberOfThreads = 1;
+        long start = System.currentTimeMillis();
 
         // For this test, we do not need assertions
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(false);
@@ -117,7 +118,8 @@ public class PrecomputingValues {
         	mDatasetManager = new GeologyDataset();
         }
         graphs = mDatasetManager.readGraphsFromFiles(datasetPath);
-
+        long end = System.currentTimeMillis();
+        System.out.println("Time: "+ (end -start));
         // compute metrics for each graph here
         ConstantValueStorage valueCarrier = new ConstantValueStorage(datasetPath);
         boolean havingData = valueCarrier.havingData();
