@@ -60,7 +60,7 @@ public class PrecomputingValues {
     public static void main(String[] args) {
         LOGGER.info("Start precomputing metric and constant expressions!");
         // MultiThreadProcessing.defaultNumberOfThreads = 1;
-
+        long start = System.currentTimeMillis();
         // For this test, we do not need assertions
         ClassLoader.getSystemClassLoader().setDefaultAssertionStatus(false);
         String dataset = args[0];
@@ -118,6 +118,8 @@ public class PrecomputingValues {
         }
         graphs = mDatasetManager.readGraphsFromFiles(datasetPath);
 
+        long end = System.currentTimeMillis();
+        System.out.println("time: " +(end - start));
         // compute metrics for each graph here
         ConstantValueStorage valueCarrier = new ConstantValueStorage(datasetPath);
         boolean havingData = valueCarrier.havingData();
@@ -175,12 +177,12 @@ public class PrecomputingValues {
 
     /**
      * create reference graph to compute constant expressions
-     * 
+     *
      * @param graphs
      *            input dataset graphs
      * @param metrics
      *            list of exploited metrics
-     * 
+     *
      * @return map of metric values of reference graphs
      */
     @SuppressWarnings("unchecked")
@@ -314,7 +316,7 @@ public class PrecomputingValues {
              ------------------*/
             // partSize = numberOfNodes / 2;
             partSize = numberOfNodes > 100000? numberOfNodes / 128 : numberOfNodes / 8;
-            
+
             ColouredGraph bipartiteColouredGraph = new ColouredGraph(
                     ClassicalGraphs.completeBipartiteGraph(partSize, partSize), null, null);
             ObjectDoubleOpenHashMap<String> bipartiteGraphMetrics = MetricUtils
@@ -337,7 +339,7 @@ public class PrecomputingValues {
 
     /**
      * get value of each metric applied on each graph
-     * 
+     *
      * @param origGrphs
      * @param lstMetrics
      * @return
